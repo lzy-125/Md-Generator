@@ -8,6 +8,6 @@ import java.io.IOException;
  */
 public class MdTest {
     public static void main(String[] args) throws IOException {
-        MdGenerator.buildMarkdown("/Users/liuzongyu/Library/Application Support/JetBrains/IntelliJIdea2024.1/scratches", TestController.class);
+        MdGenerator.generateMarkdown("/Users/liuzongyu/Library/Application Support/JetBrains/IntelliJIdea2024.1/scratches", TestController.class);
     }
 }

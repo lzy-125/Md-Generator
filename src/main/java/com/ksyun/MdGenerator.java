@@ -36,7 +36,13 @@ public class MdGenerator {
 
     }
 
-    public static void buildMarkdown(String jsonPath, Class<?>... classes) throws IOException {
+    /**
+     * 生成markdown文件
+     * @param jsonPath json文件路径
+     * @param classes 接口类
+     * @throws IOException ignore
+     */
+    public static void generateMarkdown(String jsonPath, Class<?>... classes) throws IOException {
         StringBuilder sb = new StringBuilder();
         for (Class<?> clazz : classes) {
             Method[] methods = clazz.getMethods();
@@ -48,13 +54,14 @@ public class MdGenerator {
                     if (parameters.length == 1) {
                         Field[] fields = parameters[0].getType().getDeclaredFields();
                         Class<?> subClazz = parameters[0].getType();
-                        fillDataTable(table, subClazz, null,fields.length + 2);
+                        fillDataTable(table, subClazz, null,fields.length + 1);
                     }
                     String markdown = doBuildMarkdown(method, parameters, table, jsonPath);
                     sb.append(markdown).append("\r\n");
                 }
             }
         }
+        System.out.println(sb);
         Path path = Paths.get(jsonPath + "/" + "api.md");
         Files.write(path, sb.toString().getBytes());
     }
@@ -85,12 +92,12 @@ public class MdGenerator {
             data[0][3] = "描述";
             data[0][4] = "备注";
             if (i == table.size() - 1) {
-                md.table().data(Arrays.copyOf(data, data.length - 1)).endTable();
+                md.table().data(data).endTable();
                 continue;
             }
             md.subTitle(key + " 数据类型");
             md.ref().table()
-                    .data(Arrays.copyOf(data, data.length - 1))
+                    .data(data)
                     .endTable()
                     .endRef();
         }
@@ -130,33 +137,33 @@ public class MdGenerator {
     private static void fillDataTable(List<Map<String, String[][]>> dataTable, Class<?> clazz, String propertyName, int len) {
         String[][] data = new String[len][5];
         Field[] fields = clazz.getDeclaredFields();
-        int row = 1;
+        int row = 0;
         int column = 0;
         int count = 0;
         for (Field field : fields) {
             if (basicType(field.getType())) {
+                row++;
                 data[row][column] = upperCaseFirstChar(field.getName());
                 data[row][column + 1] = getPropertyTypeMapping(field.getType().getSimpleName());
-                row++;
             }
             else if (field.getType() == List.class) {
                 Class<?> genericClass = (Class<?>) getGenericClass(field);
                 if (basicType(genericClass)) {
+                    row++;
                     data[row][column] = upperCaseFirstChar(field.getName());
                     data[row][column + 1] = "Array of " + getPropertyTypeMapping(genericClass.getSimpleName());
-                    row++;
                 }
                 else {
+                    row++;
                     data[row][column] = upperCaseFirstChar(field.getName());
                     data[row][column + 1] = "Array of Object";
-                    fillDataTable(dataTable, genericClass, field.getName(), genericClass.getDeclaredFields().length + 2);
-                    row++;
+                    fillDataTable(dataTable, genericClass, field.getName(), genericClass.getDeclaredFields().length + 1);
                 }
             } else {
+                row++;
                 data[row][column] = upperCaseFirstChar(field.getName());
                 data[row][column + 1] = "Object";
-                fillDataTable(dataTable, field.getType(), field.getName(),field.getType().getDeclaredFields().length + 2);
-                row++;
+                fillDataTable(dataTable, field.getType(), field.getName(),field.getType().getDeclaredFields().length + 1);
             }
             //一个类中的所有字段都遍历完了，添加到dataTable中
             if (count++ == fields.length - 1) {
