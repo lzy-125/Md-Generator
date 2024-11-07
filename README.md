@@ -18,6 +18,8 @@ MdGenerator 是根据各个xxController下声明接口的入参、返回值生�
 然后进行如下代码操作：
 
 ```java
+import com.ksyun.MdGenerator;
+
 @AssistAnnotation
 @RequestMapping(params = {"Action=Test"}, method = {RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT, RequestMethod.PATCH, RequestMethod.DELETE, RequestMethod.HEAD})
 @Markdown
@@ -26,7 +28,7 @@ public InstancesResponse test(@Valid @RequestBody ReqCreateContainerGroupParam p
 }
 
 public static void main(String[] args) throws IOException {
-    buildMarkdown(ContainerGroupController.class);
+    MdGenerator.generateMarkdown(ContainerGroupController.class);
 }
 ```
 
