@@ -1,7 +1,12 @@
 package com.ksyun;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.databind.json.JsonMapper;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.http.MediaType;
+import org.springframework.util.ReflectionUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -19,7 +24,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -38,11 +42,10 @@ public class MdGenerator {
 
     /**
      * 生成markdown文件
-     * @param jsonPath json文件路径
      * @param classes 接口类
      * @throws IOException ignore
      */
-    public static void generateMarkdown(String jsonPath, Class<?>... classes) throws IOException {
+    public static void generateMarkdown(Class<?>... classes) throws IOException, InstantiationException, IllegalAccessException {
         StringBuilder sb = new StringBuilder();
         for (Class<?> clazz : classes) {
             Method[] methods = clazz.getMethods();
@@ -52,21 +55,21 @@ public class MdGenerator {
                     List<Map<String, String[][]>> table = new ArrayList<>();
                     //接口方法上只能有一个参数
                     if (parameters.length == 1) {
-                        Field[] fields = parameters[0].getType().getDeclaredFields();
                         Class<?> subClazz = parameters[0].getType();
+                        Field[] fields = subClazz.getDeclaredFields();
                         fillDataTable(table, subClazz, null,fields.length + 1);
                     }
-                    String markdown = doBuildMarkdown(method, parameters, table, jsonPath);
+                    String markdown = doBuildMarkdown(method, parameters, table);
                     sb.append(markdown).append("\r\n");
                 }
             }
         }
         System.out.println(sb);
-        Path path = Paths.get(jsonPath + "/" + "api.md");
+        Path path = Paths.get(System.getProperty("user.dir") + "/src/main/resources/" + "api.md");
         Files.write(path, sb.toString().getBytes());
     }
 
-    private static String doBuildMarkdown(Method method, Parameter[] parameters, List<Map<String, String[][]>> table, String jsonPath) throws IOException {
+    private static String doBuildMarkdown(Method method, Parameter[] parameters, List<Map<String, String[][]>> table) throws IOException, InstantiationException, IllegalAccessException {
         MdKiller.SectionBuilder md = MdKiller.of()
                 .bigTitle("Action=" + upperCaseFirstChar(method.getName()))
                 .title("请求方式:")
@@ -75,10 +78,10 @@ public class MdGenerator {
         String contentType;
         if (parameters.length == 1) {
             contentType = parameters[0].isAnnotationPresent(RequestBody.class) ?
-                    "application/json" :
-                    "application/x-www-form-urlencoded";
+                    MediaType.APPLICATION_JSON_VALUE :
+                    MediaType.APPLICATION_FORM_URLENCODED_VALUE;
         } else {
-            contentType = "application/x-www-form-urlencoded";
+            contentType = MediaType.APPLICATION_FORM_URLENCODED_VALUE;
         }
         md.text(contentType);
         for (int i = table.size() - 1; i >= 0 ; i--) {
@@ -101,9 +104,13 @@ public class MdGenerator {
                     .endTable()
                     .endRef();
         }
-        Path path = Paths.get(jsonPath + "/" + method.getReturnType().getSimpleName() + ".java.json");
+        Object object = method.getReturnType().newInstance();
+        initFieldValue(object);
+        ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.enable(SerializationFeature.INDENT_OUTPUT);
+        String json = objectMapper.writeValueAsString(object);
         return md.title("返回结果：")
-                .text("```json\r\n" + new String(Files.readAllBytes(path)) + "\r\n```")
+                .text("```json\r\n" + json + "\r\n```")
                 .build();
     }
 
@@ -225,5 +232,68 @@ public class MdGenerator {
                 .filter(ArrayUtils::isNotEmpty)
                 .map(a -> a[0])
                 .orElse(null);
+    }
+
+    private static void initFieldValue(Object target) throws InstantiationException, IllegalAccessException {
+        Field[] fields = target.getClass().getDeclaredFields();
+        for (Field field : fields) {
+            Class<?> type = field.getType();
+            if (basicType(type)) {
+                setValue(target, field, type);
+            } else if (type == List.class) {
+                Class<?> genericClass = (Class<?>) getGenericClass(field);
+                if (basicType(genericClass)) {
+                    List<Object> objectList = new ArrayList<>();
+                    Object value = adapterValue(genericClass);
+                    objectList.add(value);
+                    ReflectionUtils.makeAccessible(field);
+                    ReflectionUtils.setField(field, target, objectList);
+                } else {
+                    List<Object> objList = new ArrayList<>();
+                    Object obj = genericClass.newInstance();
+                    initFieldValue(obj);
+                    objList.add(obj);
+                    ReflectionUtils.makeAccessible(field);
+                    ReflectionUtils.setField(field, target, objList);
+                }
+
+            } else {
+                Object obj = type.newInstance();
+                initFieldValue(obj);
+                ReflectionUtils.makeAccessible(field);
+                ReflectionUtils.setField(field, target, obj);
+            }
+        }
+    }
+
+    private static void setValue(Object target, Field field, Class<?> type) {
+        Object valueObject = adapterValue(type);
+        ReflectionUtils.makeAccessible(field);
+        ReflectionUtils.setField(field, target, valueObject);
+    }
+
+    private static Object adapterValue(Class<?> clazz) {
+        if (clazz == String.class) {
+            return " ";
+        } else if (clazz == Integer.class || clazz == int.class) {
+            return 0;
+        } else if (clazz == Long.class || clazz == long.class) {
+            return 0L;
+        } else if (clazz == Boolean.class || clazz == boolean.class) {
+            return false;
+        } else if (clazz == Double.class || clazz == double.class) {
+            return 0.0D;
+        } else if (clazz == Float.class || clazz == float.class) {
+            return 0.0F;
+        } else if (clazz == Byte.class || clazz == byte.class) {
+            return 0;
+        } else if (clazz == Character.class || clazz == char.class) {
+            return " ";
+        } else if (clazz == Short.class || clazz == short.class) {
+            return 0;
+        } else if (clazz == BigDecimal.class) {
+            return BigDecimal.valueOf(0);
+        }
+        return null;
     }
 }

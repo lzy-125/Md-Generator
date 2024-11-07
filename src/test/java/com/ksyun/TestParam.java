@@ -1,9 +1,12 @@
 package com.ksyun;
 
+import java.util.List;
+
 public class TestParam {
     private String name;
     private int age;
     private String address;
+
 
     public String getName() {
         return name;

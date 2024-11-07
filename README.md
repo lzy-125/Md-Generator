@@ -11,11 +11,9 @@ MdGenerator 是根据各个xxController下声明接口的入参、返回值生�
 
 1、依赖Spring框架中的注解
 
-2、需要下载名为`POJO to JSON`的idea插件
+2、依赖Jackson框架
 
 3、使用示例：
-
-选中接口返回值类的多个Java文件，右键点击 `{} copy JSON`, 此时会在idea的`Scratches and Consoles`目录下生成名为`xx.java.json`的文件
 
 然后进行如下代码操作：
 
@@ -27,14 +25,12 @@ public InstancesResponse test(@Valid @RequestBody ReqCreateContainerGroupParam p
     return null;
 }
 
-public static final String JSON_PATH = "/Users/liuzongyu/Library/Application Support/JetBrains/IntelliJIdea2024.1/scratches";
-
 public static void main(String[] args) throws IOException {
-    buildMarkdown(JSON_PATH, ContainerGroupController.class);
+    buildMarkdown(ContainerGroupController.class);
 }
 ```
 
-在`Scratches and Consoles`目录下生成名为`api.md`文件
+在`src/main/resources`目录下生成名为`api.md`文件
 
 输出的markdown文档内容如下：
 
