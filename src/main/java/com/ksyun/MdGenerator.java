@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.json.JsonMapper;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Required;
 import org.springframework.http.MediaType;
 import org.springframework.util.ReflectionUtils;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,7 +14,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import java.io.IOException;
+import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
@@ -28,6 +33,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Stream;
 
 /**
  * @Author：zongYu.Liu
@@ -152,6 +158,7 @@ public class MdGenerator {
                 row++;
                 data[row][column] = upperCaseFirstChar(field.getName());
                 data[row][column + 1] = getPropertyTypeMapping(field.getType().getSimpleName());
+                data[row][column + 2] = isRequiredField(field.getAnnotations()) ? "是" : "否";
             }
             else if (field.getType() == List.class) {
                 Class<?> genericClass = (Class<?>) getGenericClass(field);
@@ -159,17 +166,20 @@ public class MdGenerator {
                     row++;
                     data[row][column] = upperCaseFirstChar(field.getName());
                     data[row][column + 1] = "Array of " + getPropertyTypeMapping(genericClass.getSimpleName());
+                    data[row][column + 2] = isRequiredField(field.getAnnotations()) ? "是" : "否";
                 }
                 else {
                     row++;
                     data[row][column] = upperCaseFirstChar(field.getName());
                     data[row][column + 1] = "Array of Object";
+                    data[row][column + 2] = isRequiredField(field.getAnnotations()) ? "是" : "否";
                     fillDataTable(dataTable, genericClass, field.getName(), genericClass.getDeclaredFields().length + 1);
                 }
             } else {
                 row++;
                 data[row][column] = upperCaseFirstChar(field.getName());
                 data[row][column + 1] = "Object";
+                data[row][column + 2] = isRequiredField(field.getAnnotations()) ? "是" : "否";
                 fillDataTable(dataTable, field.getType(), field.getName(),field.getType().getDeclaredFields().length + 1);
             }
             //一个类中的所有字段都遍历完了，添加到dataTable中
@@ -295,5 +305,14 @@ public class MdGenerator {
             return BigDecimal.valueOf(0);
         }
         return null;
+    }
+
+    public static boolean isRequiredField(Annotation[] annotations) {
+        for (Annotation annotation : annotations) {
+            if (annotation instanceof NotNull || annotation instanceof NotEmpty || annotation instanceof NotBlank) {
+                return true;
+            }
+        }
+        return false;
     }
 }

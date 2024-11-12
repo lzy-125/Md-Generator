@@ -1,5 +1,6 @@
 package com.ksyun;
 
+import javax.validation.constraints.NotBlank;
 import java.util.List;
 
 public class TestParam {
