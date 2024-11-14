@@ -32,7 +32,7 @@ public static void main(String[] args) throws IOException {
 }
 ```
 
-在`src/main/resources`目录下生成名为`api.md`文件
+在Project根目录下生成名为`api.md`文件
 
 输出的markdown文档内容如下：
 
