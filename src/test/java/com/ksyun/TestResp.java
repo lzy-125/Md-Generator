@@ -1,13 +1,35 @@
 package com.ksyun;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.Builder;
 
 import java.util.List;
+import java.util.Map;
 
+@Builder
 public class TestResp {
         private String name;
         private int age;
         private String address;
+
+        public Object getObject() {
+                return object;
+        }
+
+        public void setObject(Object object) {
+                this.object = object;
+        }
+
+        public Map<String, Object> getMap() {
+                return map;
+        }
+
+        public void setMap(Map<String, Object> map) {
+                this.map = map;
+        }
+
+        private Object object;
+
+        private Map<String, Object> map;
 
 
         public List<Teacher> getTeacher() {

@@ -12,7 +12,7 @@ import java.lang.annotation.Target;
  * @Date：2024/11/1 18:03
  */
 @Retention(RetentionPolicy.RUNTIME)
-@Target(ElementType.METHOD)
+@Target({ElementType.METHOD, ElementType.TYPE})
 @Documented
 @Inherited
 public @interface Markdown {

@@ -2,10 +2,9 @@ package com.ksyun;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
-import com.fasterxml.jackson.databind.json.JsonMapper;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.annotation.Required;
+import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.http.MediaType;
 import org.springframework.util.ReflectionUtils;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -30,6 +29,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -51,31 +51,33 @@ public class MdGenerator {
      * @param classes 接口类
      * @throws IOException ignore
      */
-    public static void generateMarkdown(Class<?>... classes) throws IOException, InstantiationException, IllegalAccessException {
+    public static void generateMarkdown(Class<?>... classes) throws IOException, ClassNotFoundException, InstantiationException, IllegalAccessException {
         StringBuilder sb = new StringBuilder();
         for (Class<?> clazz : classes) {
-            Method[] methods = clazz.getMethods();
-            for (Method method : methods) {
-                if (method.isAnnotationPresent(Markdown.class)) {
-                    Parameter[] parameters = method.getParameters();
-                    List<Map<String, String[][]>> table = new ArrayList<>();
-                    //接口方法上只能有一个参数
-                    if (parameters.length == 1) {
-                        Class<?> subClazz = parameters[0].getType();
-                        Field[] fields = subClazz.getDeclaredFields();
-                        fillDataTable(table, subClazz, null,fields.length + 1);
-                    }
-                    String markdown = doBuildMarkdown(method, parameters, table);
-                    sb.append(markdown).append("\r\n");
+            //如果类上带有@Markdown注解，为所有方法生成markdown
+            Stream<Method> methodStream = Stream.of(clazz.getMethods()).filter(e -> !ignoreMethod(e.getName()));
+            if (!AnnotationUtils.isAnnotationDeclaredLocally(Markdown.class, clazz)) {
+                methodStream = methodStream.filter(e -> e.isAnnotationPresent(Markdown.class));
+            }
+            for (Method method : methodStream.toArray(Method[]::new)) {
+                Parameter[] parameters = method.getParameters();
+                List<Map<String, String[][]>> table = new ArrayList<>();
+                //接口方法上只能有一个参数
+                if (parameters.length == 1) {
+                    Class<?> subClazz = parameters[0].getType();
+                    Field[] fields = subClazz.getDeclaredFields();
+                    fillDataTable(table, subClazz, null, fields.length + 1);
                 }
+                String markdown = doBuildMarkdown(method, parameters, table);
+                sb.append(markdown).append("\r\n");
             }
         }
         System.out.println(sb);
-        Path path = Paths.get(System.getProperty("user.dir") + "/src/main/resources/" + "api.md");
+        Path path = Paths.get(System.getProperty("user.dir") + "/api.md");
         Files.write(path, sb.toString().getBytes());
     }
 
-    private static String doBuildMarkdown(Method method, Parameter[] parameters, List<Map<String, String[][]>> table) throws IOException, InstantiationException, IllegalAccessException {
+    private static String doBuildMarkdown(Method method, Parameter[] parameters, List<Map<String, String[][]>> table) throws IOException, InstantiationException, IllegalAccessException, ClassNotFoundException {
         MdKiller.SectionBuilder md = MdKiller.of()
                 .bigTitle("Action=" + upperCaseFirstChar(method.getName()))
                 .title("请求方式:")
@@ -110,11 +112,13 @@ public class MdGenerator {
                     .endTable()
                     .endRef();
         }
-        Object object = method.getReturnType().newInstance();
-        initFieldValue(object);
+        Class<?> returnType = method.getReturnType();
+        Object target = newInstance(returnType);
+        initFieldValue(target);
         ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.enable(SerializationFeature.INDENT_OUTPUT);
-        String json = objectMapper.writeValueAsString(object);
+        objectMapper.disable(SerializationFeature.FAIL_ON_EMPTY_BEANS);
+        String json = objectMapper.writeValueAsString(target);
         return md.title("返回结果：")
                 .text("```json\r\n" + json + "\r\n```")
                 .build();
@@ -189,25 +193,6 @@ public class MdGenerator {
         }
     }
 
-    private static String getPropertyTypeMapping(String propertyType) {
-        switch (propertyType) {
-            case "Integer":
-                return "int";
-            case "Long":
-                return "long";
-            case "BigDecimal":
-            case "Double":
-            case "Float":
-                return "float";
-            case "Boolean":
-                return "boolean";
-            case "String":
-                return "string";
-            default:
-                return propertyType;
-        }
-    }
-
     private static String upperCaseFirstChar(String str) {
         if (StringUtils.isEmpty(str)) {
             return str;
@@ -219,20 +204,6 @@ public class MdGenerator {
             return str;
         }
         return str;
-    }
-
-    private static boolean basicType(Class<?> clz) {
-        return clz.isPrimitive()
-                || clz == String.class
-                || clz == Boolean.class
-                || clz == Integer.class
-                || clz == Byte.class
-                || clz == Double.class
-                || clz == Float.class
-                || clz == Character.class
-                || clz == Short.class
-                || clz == Long.class
-                || clz == BigDecimal.class;
     }
 
     private static Type getGenericClass(Field f) {
@@ -260,15 +231,24 @@ public class MdGenerator {
                     ReflectionUtils.setField(field, target, objectList);
                 } else {
                     List<Object> objList = new ArrayList<>();
-                    Object obj = genericClass.newInstance();
+                    Object obj = newInstance(genericClass);
                     initFieldValue(obj);
                     objList.add(obj);
                     ReflectionUtils.makeAccessible(field);
                     ReflectionUtils.setField(field, target, objList);
                 }
 
-            } else {
+            } else if (type == Object.class) {
                 Object obj = type.newInstance();
+                ReflectionUtils.makeAccessible(field);
+                ReflectionUtils.setField(field, target, obj);
+            } else if (type == Map.class) {
+                Map<String, Object> obj = new HashMap<>();
+                ReflectionUtils.makeAccessible(field);
+                ReflectionUtils.setField(field, target, obj);
+            }
+            else {
+                Object obj = newInstance(type);
                 initFieldValue(obj);
                 ReflectionUtils.makeAccessible(field);
                 ReflectionUtils.setField(field, target, obj);
@@ -276,10 +256,54 @@ public class MdGenerator {
         }
     }
 
+    private static Object newInstance(Class<?> genericClass) throws InstantiationException, IllegalAccessException {
+        //带有@builder注解的类，需要先找到builder方法，然后调用build方法获取实例
+        Method builder = ReflectionUtils.findMethod(genericClass, "builder");
+        if (builder != null) {
+            Object builderObj = ReflectionUtils.invokeMethod(builder, null);
+            Method build = ReflectionUtils.findMethod(builderObj.getClass(), "build");
+            return ReflectionUtils.invokeMethod(build, builderObj);
+        }
+        return genericClass.newInstance();
+    }
+
     private static void setValue(Object target, Field field, Class<?> type) {
         Object valueObject = adapterValue(type);
         ReflectionUtils.makeAccessible(field);
         ReflectionUtils.setField(field, target, valueObject);
+    }
+
+    private static String getPropertyTypeMapping(String propertyType) {
+        switch (propertyType) {
+            case "Integer":
+                return "int";
+            case "Long":
+                return "long";
+            case "BigDecimal":
+            case "Double":
+            case "Float":
+                return "float";
+            case "Boolean":
+                return "boolean";
+            case "String":
+                return "string";
+            default:
+                return propertyType;
+        }
+    }
+
+    private static boolean basicType(Class<?> clz) {
+        return clz.isPrimitive()
+                || clz == String.class
+                || clz == Boolean.class
+                || clz == Integer.class
+                || clz == Byte.class
+                || clz == Double.class
+                || clz == Float.class
+                || clz == Character.class
+                || clz == Short.class
+                || clz == Long.class
+                || clz == BigDecimal.class;
     }
 
     private static Object adapterValue(Class<?> clazz) {
@@ -314,5 +338,15 @@ public class MdGenerator {
             }
         }
         return false;
+    }
+
+    private static boolean ignoreMethod(String methodName) {
+        return "wait".equals(methodName)
+                || "equals".equals(methodName)
+                || "hashCode".equals(methodName)
+                || "toString".equals(methodName)
+                || "getClass".equals(methodName)
+                || "notify".equals(methodName)
+                || "notifyAll".equals(methodName);
     }
 }
