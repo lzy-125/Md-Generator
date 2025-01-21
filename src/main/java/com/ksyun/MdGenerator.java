@@ -2,6 +2,11 @@ package com.ksyun;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
+import com.github.javaparser.JavaParser;
+import com.github.javaparser.ParseResult;
+import com.github.javaparser.ast.CompilationUnit;
+import com.github.javaparser.ast.body.FieldDeclaration;
+import com.github.javaparser.ast.comments.Comment;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.core.annotation.AnnotationUtils;
@@ -16,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import java.io.File;
 import java.io.IOException;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
@@ -24,6 +30,7 @@ import java.lang.reflect.Parameter;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.math.BigDecimal;
+import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -33,6 +40,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
@@ -157,12 +165,14 @@ public class MdGenerator {
         int row = 0;
         int column = 0;
         int count = 0;
+        Map<String, String> filedDoc = getFiledDoc(clazz);
         for (Field field : fields) {
             if (basicType(field.getType())) {
                 row++;
                 data[row][column] = upperCaseFirstChar(field.getName());
                 data[row][column + 1] = getPropertyTypeMapping(field.getType().getSimpleName());
                 data[row][column + 2] = isRequiredField(field.getAnnotations()) ? "是" : "否";
+                data[row][column + 3] = filedDoc.get(field.getName());
             }
             else if (field.getType() == List.class) {
                 Class<?> genericClass = (Class<?>) getGenericClass(field);
@@ -171,12 +181,14 @@ public class MdGenerator {
                     data[row][column] = upperCaseFirstChar(field.getName());
                     data[row][column + 1] = "Array of " + getPropertyTypeMapping(genericClass.getSimpleName());
                     data[row][column + 2] = isRequiredField(field.getAnnotations()) ? "是" : "否";
+                    data[row][column + 3] = filedDoc.get(field.getName());
                 }
                 else {
                     row++;
                     data[row][column] = upperCaseFirstChar(field.getName());
                     data[row][column + 1] = "Array of Object";
                     data[row][column + 2] = isRequiredField(field.getAnnotations()) ? "是" : "否";
+                    data[row][column + 3] = filedDoc.get(field.getName());
                     fillDataTable(dataTable, genericClass, field.getName(), genericClass.getDeclaredFields().length + 1);
                 }
             } else {
@@ -184,12 +196,38 @@ public class MdGenerator {
                 data[row][column] = upperCaseFirstChar(field.getName());
                 data[row][column + 1] = "Object";
                 data[row][column + 2] = isRequiredField(field.getAnnotations()) ? "是" : "否";
+                data[row][column + 3] = filedDoc.get(field.getName());
                 fillDataTable(dataTable, field.getType(), field.getName(),field.getType().getDeclaredFields().length + 1);
             }
             //一个类中的所有字段都遍历完了，添加到dataTable中
             if (count++ == fields.length - 1) {
                 dataTable.add(Collections.singletonMap(upperCaseFirstChar(propertyName), data));
             }
+        }
+    }
+
+    private static Map<String, String> getFiledDoc(Class<?> clazz) {
+        try {
+            // 获取类文件的 URL
+            String classFilePath = clazz.getProtectionDomain().getCodeSource().getLocation().toURI().getPath().replace("/target/classes","");
+            // 获取类的包路径
+            String packagePath = clazz.getPackage().getName().replace('.', File.separatorChar);
+            // 获取类的文件名
+            String className = clazz.getSimpleName() + ".java";
+            // 组合成完整路径
+            String fullPath = classFilePath + "src/main/java/" + packagePath + File.separator + className;
+            ParseResult<CompilationUnit> parse = new JavaParser().parse(Paths.get(fullPath));
+            Map<String, String> map = new HashMap<>();
+            if(parse.getResult().isPresent()) {
+                List<FieldDeclaration> fieldDeclarations = parse.getResult().get().findAll(FieldDeclaration.class);
+                for (FieldDeclaration fieldDeclaration : fieldDeclarations) {
+                    map.put(fieldDeclaration.getVariable(0).getName().asString(),
+                            fieldDeclaration.getComment().map(Comment::getContent).orElse(""));
+                }
+            }
+            return map;
+        } catch (URISyntaxException | IOException e) {
+            throw new RuntimeException(e);
         }
     }
 

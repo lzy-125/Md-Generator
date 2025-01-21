@@ -58,5 +58,11 @@
       <version>1.18.30</version>
       <scope>provided</scope>
     </dependency>
+
+    <dependency>
+      <groupId>com.github.javaparser</groupId>
+      <artifactId>javaparser-core</artifactId>
+      <version>3.24.0</version>
+    </dependency>
   </dependencies>
 </project>
