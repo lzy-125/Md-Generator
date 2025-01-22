@@ -1,0 +1,8 @@
+<component name="InspectionProjectProfileManager">
+  <profile version="1.0">
+    <option name="myName" value="Project Default" />
+    <inspection_tool class="JavadocDeclaration" enabled="true" level="WARNING" enabled_by_default="true">
+      <option name="ADDITIONAL_TAGS" value="description：接口markdown生成器,Date：2024/10/31,Author：zongYu.Liu,Date：2024/11/1" />
+    </inspection_tool>
+  </profile>
+</component>

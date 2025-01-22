@@ -1,0 +1,270 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="883ccf4d-29cb-421e-ab2e-5725e48d26c5" name="Changes" comment="本次改动：&#10;1.增加对字段注释的解析">
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/ksyun/MdGenerator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/ksyun/MdGenerator.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/com/ksyun/MdTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/ksyun/MdTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/com/ksyun/TestParam.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/ksyun/TestParam.java" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Class" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="master" />
+      </map>
+    </option>
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="MavenImportPreferences">
+    <option name="generalSettings">
+      <MavenGeneralSettings>
+        <option name="localRepository" value="$USER_HOME$/Environment/Repos/maven_repos" />
+        <option name="userSettingsFile" value="$USER_HOME$/Environment/apache-maven-3.6.3/conf/settings.xml" />
+      </MavenGeneralSettings>
+    </option>
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 5
+}</component>
+  <component name="ProjectId" id="2oHHbXHwDArjbqSbgxmVQvrWSwz" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Application.MdTest.executor": "Run",
+    "Application.TestA.executor": "Run",
+    "Maven. [org.apache.maven.plugins:maven-archetype-plugin:RELEASE:generate].executor": "Run",
+    "Maven.MdGenerator [deploy].executor": "Run",
+    "Maven.MdGenerator [install].executor": "Run",
+    "Maven.MdGenerator [package].executor": "Run",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "/Users/liuzongyu/IdeaProjects/MdGenerator",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "project.structure.last.edited": "Modules",
+    "project.structure.proportion": "0.15",
+    "project.structure.side.proportion": "0.2",
+    "settings.editor.selected.configurable": "MavenSettings",
+    "vue.rearranger.settings.migration": "true"
+  }
+}]]></component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$" />
+      <recent name="$PROJECT_DIR$/src/test/java/com/ksyun" />
+      <recent name="$PROJECT_DIR$/src/main/java/com/ksyun" />
+    </key>
+    <key name="MoveClassesOrPackagesDialog.RECENTS_KEY">
+      <recent name="com.ksyun" />
+    </key>
+  </component>
+  <component name="RunManager" selected="Application.MdTest">
+    <configuration name="MdTest" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="com.ksyun.MdTest" />
+      <module name="MdGenerator" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.ksyun.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="TestA" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="com.ksyun.TestA" />
+      <module name="MdGenerator" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.ksyun.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Application.MdTest" />
+        <item itemvalue="Application.TestA" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-jdk-9f38398b9061-18abd8497189-intellij.indexing.shared.core-IU-241.14494.240" />
+        <option value="bundled-js-predefined-1d06a55b98c1-74d2a5396914-JavaScript-IU-241.14494.240" />
+      </set>
+    </attachedChunks>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="883ccf4d-29cb-421e-ab2e-5725e48d26c5" name="Changes" comment="" />
+      <created>1730519654463</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1730519654463</updated>
+      <workItem from="1730519655972" duration="10607000" />
+      <workItem from="1730789951230" duration="47000" />
+      <workItem from="1730958809702" duration="12274000" />
+      <workItem from="1731391697145" duration="161000" />
+      <workItem from="1731391866590" duration="16764000" />
+      <workItem from="1731651545734" duration="4293000" />
+      <workItem from="1732342516741" duration="827000" />
+      <workItem from="1737453337357" duration="2425000" />
+      <workItem from="1737456412693" duration="21280000" />
+    </task>
+    <task id="LOCAL-00001" summary="接口markdown文档生成工具 v1.0">
+      <option name="closed" value="true" />
+      <created>1730520125739</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1730520125739</updated>
+    </task>
+    <task id="LOCAL-00002" summary="接口markdown文档生成工具 v1.0">
+      <option name="closed" value="true" />
+      <created>1730521172613</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1730521172613</updated>
+    </task>
+    <task id="LOCAL-00003" summary="接口markdown文档生成工具 v1.0">
+      <option name="closed" value="true" />
+      <created>1730521243964</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1730521243965</updated>
+    </task>
+    <task id="LOCAL-00004" summary="接口markdown文档生成工具 v1.0">
+      <option name="closed" value="true" />
+      <created>1730540451701</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1730540451701</updated>
+    </task>
+    <task id="LOCAL-00005" summary="本次改动：&#10;1.去掉了idea插件的依赖，手动解析接口响应类的json本文">
+      <option name="closed" value="true" />
+      <created>1730967130982</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1730967130982</updated>
+    </task>
+    <task id="LOCAL-00006" summary="本次改动：&#10;1.更新了README.md文件">
+      <option name="closed" value="true" />
+      <created>1730970936411</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1730970936411</updated>
+    </task>
+    <task id="LOCAL-00007" summary="本次改动：&#10;1.接口文档是否必填项自动补充">
+      <option name="closed" value="true" />
+      <created>1731395697751</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1731395697751</updated>
+    </task>
+    <task id="LOCAL-00008" summary="本次改动：&#10;1.支持在Controller类上加@Markdown注解&#10;2.支持Response类的属性是Object或Map&#10;3.修改生成的api.md文件到项目的根目录下">
+      <option name="closed" value="true" />
+      <created>1731563123447</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1731563123447</updated>
+    </task>
+    <task id="LOCAL-00009" summary="本次改动：&#10;1.修改readme.md文档说明">
+      <option name="closed" value="true" />
+      <created>1731564295996</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1731564295996</updated>
+    </task>
+    <task id="LOCAL-00010" summary="本次改动：&#10;1.增加对字段注释的解析">
+      <option name="closed" value="true" />
+      <created>1737462875270</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1737462875270</updated>
+    </task>
+    <option name="localTasksCounter" value="11" />
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="接口markdown文档生成工具 v1.0" />
+    <MESSAGE value="本次改动：&#10;1.去掉了idea插件的依赖，手动解析接口响应类的json本文" />
+    <MESSAGE value="本次改动：&#10;1.更新了README.md文件" />
+    <MESSAGE value="本次改动：&#10;1.接口文档是否必填项自动补充" />
+    <MESSAGE value="本次改动：&#10;1.支持在Controller类上加@Markdown注解&#10;2.支持Response类的属性是Object或Map&#10;3.修改生成的api.md文件到项目的根目录下" />
+    <MESSAGE value="本次改动：&#10;1.修改readme.md文档说明" />
+    <MESSAGE value="本次改动：&#10;1.增加对字段注释的解析" />
+    <option name="LAST_COMMIT_MESSAGE" value="本次改动：&#10;1.增加对字段注释的解析" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/com/ksyun/MdGenerator.java</url>
+          <line>180</line>
+          <option name="timeStamp" value="7" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/test/java/com/ksyun/MdTest.java</url>
+          <line>10</line>
+          <option name="timeStamp" value="17" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/com/ksyun/MdGenerator.java</url>
+          <line>220</line>
+          <option name="timeStamp" value="20" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
+  </component>
+</project>
