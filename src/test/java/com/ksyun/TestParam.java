@@ -1,13 +1,14 @@
 package com.ksyun;
 
-import javax.validation.constraints.NotBlank;
-import java.util.List;
-
 public class TestParam {
+    /** 名字*/
     private String name;
+    /** 年龄 */
     private int age;
+    /** 地址 */
     private String address;
 
+    private Person person;
 
     public String getName() {
         return name;

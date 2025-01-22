@@ -11,6 +11,7 @@ import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.http.MediaType;
+import org.springframework.util.ClassUtils;
 import org.springframework.util.ReflectionUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -32,6 +33,7 @@ import java.lang.reflect.Type;
 import java.math.BigDecimal;
 import java.net.URISyntaxException;
 import java.nio.file.Files;
+import java.nio.file.NoSuchFileException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -211,7 +213,7 @@ public class MdGenerator {
             // 获取类文件的 URL
             String classFilePath = clazz.getProtectionDomain().getCodeSource().getLocation().toURI().getPath().replace("/target/classes","");
             // 获取类的包路径
-            String packagePath = clazz.getPackage().getName().replace('.', File.separatorChar);
+            String packagePath = ClassUtils.classPackageAsResourcePath(clazz);
             // 获取类的文件名
             String className = clazz.getSimpleName() + ".java";
             // 组合成完整路径
@@ -227,7 +229,7 @@ public class MdGenerator {
             }
             return map;
         } catch (URISyntaxException | IOException e) {
-            throw new RuntimeException(e);
+            return Collections.emptyMap();
         }
     }
 
