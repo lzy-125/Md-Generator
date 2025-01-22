@@ -4,11 +4,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="883ccf4d-29cb-421e-ab2e-5725e48d26c5" name="Changes" comment="本次改动：&#10;1.增加对字段注释的解析">
-      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/ksyun/MdGenerator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/ksyun/MdGenerator.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/ksyun/MdTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/ksyun/MdTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/ksyun/TestParam.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/ksyun/TestParam.java" afterDir="false" />
+    <list default="true" id="883ccf4d-29cb-421e-ab2e-5725e48d26c5" name="Changes" comment="本次改动：&#10;1.完善readme文档">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -25,7 +22,7 @@
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$" value="master" />
+        <entry key="$PROJECT_DIR$" value="feature-20250121-supportJavaDoc" />
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -108,6 +105,8 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Application.TestA" />
+        <item itemvalue="Application.MdTest" />
         <item itemvalue="Application.MdTest" />
         <item itemvalue="Application.TestA" />
       </list>
@@ -137,7 +136,7 @@
       <workItem from="1731651545734" duration="4293000" />
       <workItem from="1732342516741" duration="827000" />
       <workItem from="1737453337357" duration="2425000" />
-      <workItem from="1737456412693" duration="21280000" />
+      <workItem from="1737456412693" duration="24229000" />
     </task>
     <task id="LOCAL-00001" summary="接口markdown文档生成工具 v1.0">
       <option name="closed" value="true" />
@@ -219,7 +218,15 @@
       <option name="project" value="LOCAL" />
       <updated>1737462875270</updated>
     </task>
-    <option name="localTasksCounter" value="11" />
+    <task id="LOCAL-00011" summary="本次改动：&#10;1.完善readme文档">
+      <option name="closed" value="true" />
+      <created>1737533599644</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1737533599644</updated>
+    </task>
+    <option name="localTasksCounter" value="12" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -244,27 +251,7 @@
     <MESSAGE value="本次改动：&#10;1.支持在Controller类上加@Markdown注解&#10;2.支持Response类的属性是Object或Map&#10;3.修改生成的api.md文件到项目的根目录下" />
     <MESSAGE value="本次改动：&#10;1.修改readme.md文档说明" />
     <MESSAGE value="本次改动：&#10;1.增加对字段注释的解析" />
-    <option name="LAST_COMMIT_MESSAGE" value="本次改动：&#10;1.增加对字段注释的解析" />
-  </component>
-  <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/com/ksyun/MdGenerator.java</url>
-          <line>180</line>
-          <option name="timeStamp" value="7" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/test/java/com/ksyun/MdTest.java</url>
-          <line>10</line>
-          <option name="timeStamp" value="17" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/com/ksyun/MdGenerator.java</url>
-          <line>220</line>
-          <option name="timeStamp" value="20" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
+    <MESSAGE value="本次改动：&#10;1.完善readme文档" />
+    <option name="LAST_COMMIT_MESSAGE" value="本次改动：&#10;1.完善readme文档" />
   </component>
 </project>
